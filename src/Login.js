@@ -1,11 +1,7 @@
-import React, {useRef, useState, useEffect, useContext } from 'react';
-import AuthContext from '../context/AuthProvider';
-
-import axios from '../api/axios';
-const LOGIN_URL = '/auth';
+import axios from './api/axios';
+import {useRef, useState, useEffect, useContext} from 'react';
 
 const Login = () => {
-    const { setAuth } = useContext(AuthContext);
     const userRef = useRef();
     const errRef = useRef();
 
@@ -13,33 +9,41 @@ const Login = () => {
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
+
     useEffect(() => {
-         userRef.current.focus();
-    }, []);
+        userRef.current.focus();
+    }, [])
 
     useEffect(() => {
         setErrMsg('');
-    }, [user, pwd]);
+    }, [user, pwd])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
-            const response = await axios.post(LOGIN_URL,
-                JSON.stringify({ user, pwd }),
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                }
-            );
+            const response = await axios.post("/auth/signin", {
+                email: user,
+                password: pwd,
+            });
+            console.log(response);
+
+
             console.log(JSON.stringify(response?.data));
             console.log(JSON.stringify(response));
             const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles;
-            setAuth({ user, pwd, roles, accessToken });
+            // setAuth({user, pwd, roles, accessToken});
             setUser('');
             setPwd('');
             setSuccess(true);
+
+            if (response.data.access_token) {
+                localStorage.setItem("access_token", response.data.access_token);
+            }
+            if (response.status === 200) {
+                console.log(response);
+                // navigate("../todo", { replace: true });
+            }
         } catch (err) {
             if (!err?.response) {
                 setErrMsg('No Server Response');
@@ -54,30 +58,20 @@ const Login = () => {
         }
     }
 
-    const onChangeUsername = (e) => {
-        setUser(e.target.value);
-    }
-
-    const onChangePassword = (e) => {
-        setPwd(e.target.value);
-    }
     return (
         <>
             {success ? (
                 <section>
-                    <h1>Hello user</h1>
+                    <h1>You are logged in!</h1>
                     <br/>
-                    <p><a href="#">Go to Home</a></p>
+                    <p>
+                        <a href="#">Go to Home</a>
+                    </p>
                 </section>
             ) : (
                 <section>
-                    <p
-                        ref={errRef}
-                        className={errMsg ? "errmsg" : "offscreen"}
-                        aria-live="assertive">
-                        {errMsg}
-                    </p>
-                    <h1>Login</h1>
+                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+                    <h1>Sign In</h1>
                     <form onSubmit={handleSubmit}>
                         <label htmlFor="username">Username:</label>
                         <input
@@ -85,7 +79,7 @@ const Login = () => {
                             id="username"
                             ref={userRef}
                             autoComplete="off"
-                            onChange={onChangeUsername}
+                            onChange={(e) => setUser(e.target.value)}
                             value={user}
                             required
                         />
@@ -94,8 +88,8 @@ const Login = () => {
                         <input
                             type="password"
                             id="password"
+                            onChange={(e) => setPwd(e.target.value)}
                             value={pwd}
-                            onChange={onChangePassword}
                             required
                         />
                         <button>Sign In</button>
@@ -103,8 +97,9 @@ const Login = () => {
                     <p>
                         Need an Account?<br/>
                         <span className="line">
-                    <a href="#">Sign Up</a>
-                </span>
+                            {/*put router link here*/}
+                            <a href="#">Sign Up</a>
+                        </span>
                     </p>
                 </section>
             )}
@@ -112,4 +107,4 @@ const Login = () => {
     )
 }
 
-export default Login;
+export default Login

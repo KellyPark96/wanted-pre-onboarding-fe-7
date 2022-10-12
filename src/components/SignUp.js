@@ -1,7 +1,13 @@
-import axios from './api/axios';
-import {useRef, useState, useEffect, useContext} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
+import axios from '../api/axios';
 
-const Login = () => {
+import useAuth from '../hooks/useAuth';
+import {Link, useNavigate} from "react-router-dom";
+const signup_URL = '/auth/signup';
+
+const Signup = () => {
+    const navigate = useNavigate();
+    const { setAuth } = useAuth();
     const userRef = useRef();
     const errRef = useRef();
 
@@ -21,18 +27,15 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("/auth/signin", {
-                email: user,
-                password: pwd,
-            });
+            const response = await axios.post(signup_URL,
+                JSON.stringify({ email: user, password: pwd }),
+                {
+                    headers: { "Content-Type": "application/json" }
+                }
+            );
             console.log(response);
-
-
-            console.log(JSON.stringify(response?.data));
-            console.log(JSON.stringify(response));
-            const accessToken = response?.data?.accessToken;
-            const roles = response?.data?.roles;
-            // setAuth({user, pwd, roles, accessToken});
+            const accessToken = response?.data?.access_token;
+            setAuth({user, pwd, accessToken});
             setUser('');
             setPwd('');
             setSuccess(true);
@@ -40,15 +43,18 @@ const Login = () => {
             if (response.data.access_token) {
                 localStorage.setItem("access_token", response.data.access_token);
             }
-            if (response.status === 200) {
+            if (response.status === 201) {
                 console.log(response);
-                // navigate("../todo", { replace: true });
+                navigate('/todos');
             }
         } catch (err) {
             if (!err?.response) {
                 setErrMsg('No Server Response');
             } else if (err.response?.status === 400) {
-                setErrMsg('Missing Username or Password');
+                console.log(err.response);
+                console.log(err.message);
+                console.log(err.request);
+                setErrMsg('있거나 validation에 맞지 않음');
             } else if (err.response?.status === 401) {
                 setErrMsg('Unauthorized');
             } else {
@@ -60,18 +66,10 @@ const Login = () => {
 
     return (
         <>
-            {success ? (
-                <section>
-                    <h1>You are logged in!</h1>
-                    <br/>
-                    <p>
-                        <a href="#">Go to Home</a>
-                    </p>
-                </section>
-            ) : (
+            {!success && (
                 <section>
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-                    <h1>Sign In</h1>
+                    <h1>Sign Up</h1>
                     <form onSubmit={handleSubmit}>
                         <label htmlFor="username">Username:</label>
                         <input
@@ -92,14 +90,11 @@ const Login = () => {
                             value={pwd}
                             required
                         />
-                        <button>Sign In</button>
+                        <button>Sign Up</button>
                     </form>
                     <p>
-                        Need an Account?<br/>
-                        <span className="line">
-                            {/*put router link here*/}
-                            <a href="#">Sign Up</a>
-                        </span>
+                        Already a user?<br/>
+                        <Link to="/">Login</Link>
                     </p>
                 </section>
             )}
@@ -107,4 +102,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Signup

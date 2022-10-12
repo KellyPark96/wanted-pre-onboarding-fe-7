@@ -1,3 +1,10 @@
+## React, React Router, Axios
+### 로그인 - 회원가입 기능 개발
+### 이메일 조건 @ 포함 (validation)
+### 비밀번호 조건 8글자 이상 (validation)
+### validation 만족할 때만 Button 활성화
+### validation 만족할 때만 Button 활성화
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

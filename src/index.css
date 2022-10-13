@@ -1,113 +1,181 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 html {
-  font-family: 'Noto Sans', sans-serif;
-  font-size: 22px;
-  color: #333;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 22px;
+    color: #333;
 }
 
 body {
-  min-height: 100vh;
-  background-color: white;
+    position: relative;
+    min-height: 100vh;
+    background-color: white;
 }
 
 .App {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
 section {
-  width: 100%;
-  max-width: 420px;
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: 1rem;
-  border: 1px solid #0000005e;
-  border-radius: 5%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 420px;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 1rem;
+    border: 1px solid #0000005e;
+    border-radius: 5%;
+}
+
+.commonForm {
+    flex-direction: column;
 }
 
 form {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  flex-grow: 1;
-  padding-bottom: 1rem;
+    display: flex;
+    justify-content: space-evenly;
+    padding-bottom: 1rem;
 }
 
 a, a:visited {
-  color: #666;
+    color: #666;
+}
+
+input[type="text"],
+input[type="password"] {
+    text-indent: 5px;
 }
 
 input[type="text"],
 input[type="password"],
 button,
 textarea {
-  font-family: 'Noto Sans', sans-serif;
-  font-size: 22px;
-  padding: 0.25rem;
-  border-radius: 0.5rem;
-}
-
-label,
-button {
-  margin-top: 1rem;
+    outline: none;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 22px;
+    padding: 0.25rem;
+    border: 1px solid #333;
 }
 
 button {
-  padding: 0.5rem;
+    padding: 0.5rem;
 }
 
 .instructions {
-  font-size: 0.75rem;
-  border-radius: 0.5rem;
-  background: #000;
-  color: #fff;
-  padding: 0.25rem;
-  position: relative;
-  bottom: -10px;
+    font-size: 0.75rem;
+    border-radius: 0.5rem;
+    background: #000;
+    color: #fff;
+    padding: 0.25rem;
+    position: relative;
+    bottom: -10px;
 }
 
 .instructions > svg {
-  margin-right: 0.25rem;
+    margin-right: 0.25rem;
 }
 
 .offscreen {
-  position: absolute;
-  left: -9999px;
+    position: absolute;
+    left: -9999px;
 }
 
 .hide {
-  display: none;
+    display: none;
 }
 
 .valid {
-  color: limegreen;
-  margin-left: 0.25rem;
+    color: limegreen;
+    margin-left: 0.25rem;
 }
 
 .invalid {
-  color: red;
-  margin-left: 0.25rem;
+    color: red;
+    margin-left: 0.25rem;
 }
 
 .errmsg {
-  background-color: lightpink;
-  color: firebrick;
-  font-weight: bold;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
+    background-color: lightpink;
+    color: firebrick;
+    font-weight: bold;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .line {
-  display: inline-block;
+    display: inline-block;
+}
+
+/* todos */
+.todoFormWrap {
+    width: 80%;
+    min-height: 400px;
+    margin: 2rem auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 2rem;
+    border: 1px solid #0000005e;
+    border-radius: 5%;
+}
+
+.todoForm {
+    flex-direction: row;
+    border-radius: 3px;
+    height: 4rem;
+}
+
+.todoForm input {
+    flex: 1;
+    border-radius: 5px 0 0 5px;
+}
+
+.todoForm .registerButton {
+    border-radius: 0 5px 5px 0;
+    background-color: #F16056FF;
+    border: 1px solid #F16056FF;
+    color: #333;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    border-bottom: 1px solid #F16056FF;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    font-size: 1.1em;
+    color: #1A0908FF;
+}
+.todoListButtonWrap {
+    display: flex;
+    gap: 10px;
+}
+li button {
+    padding: 0 8px 0 8px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.delete {
+    background-color: #F16056FF;
+    color: #1A0908FF;
 }

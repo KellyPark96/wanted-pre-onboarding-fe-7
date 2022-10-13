@@ -1,4 +1,4 @@
-import { getTodos, postTodos } from "../api/Todo";
+import { getTodos, postTodo, updateTodo, deleteTodo } from "../api/TodoApi";
 import React, {useEffect, useRef, useState} from "react";
 import TodoList from "../components/TodoList";
 const getTodos_URL = '/auth/todos';
@@ -15,10 +15,7 @@ function Todos(){
     const handleRegisterTodo = (e) => {
         e.preventDefault();
         console.log(value);
-        postTodos(value).then(response => console.log(response.data));
-        // const newTodo = {
-        //     title: e.target.title.value,
-        // };
+        postTodo(value).then(response => console.log(response.data));
     }
 
     const changeCreteValue = (e) => {
@@ -26,15 +23,15 @@ function Todos(){
     }
 
     return (
-        <section>
-            <form onSubmit={handleRegisterTodo}>
-                <input onChange={changeCreteValue} type="text" placeholder="입력하세요." />
-                <button>Register</button>
+        <div className="todoFormWrap">
+            <form className="todoForm" onSubmit={handleRegisterTodo}>
+                <input onChange={changeCreteValue} type="text" placeholder="Write Your Todo List." />
+                <button className="registerButton">Register</button>
             </form>
             <ul>
                 {todos.map(todo => <TodoList key={todo.id} todoList={todo}/>)}
             </ul>
-        </section>
+        </div>
     )
 }
 export default Todos;

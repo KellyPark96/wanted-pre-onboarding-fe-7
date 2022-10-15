@@ -26,6 +26,13 @@ body {
     min-height: 100vh;
 }
 
+.header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #F16056FF;
+    box-shadow: 0 0 6px rgb(127 122 122 / 28%);
+}
+
 section {
     position: absolute;
     top: 50%;

@@ -8,5 +8,8 @@ export const SignIn = ({ email, password }) => {
         (user) => user.email === email && user.password === password
     );
     if (user === undefined) throw new Error();
+    console.log(email);
+    console.log(password);
+    console.log(user);
     return user;
 }

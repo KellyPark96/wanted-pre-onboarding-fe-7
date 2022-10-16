@@ -1,105 +1,114 @@
-import React, {useRef, useState, useEffect} from 'react';
-import axios from '../api/axios';
+import { postSignUp } from "../api/AuthApi";
+import React, { useRef, useState, useEffect } from 'react';
+import { useLocation, useNavigate } from "react-router-dom";
 
-import useAuth from '../hooks/useAuth';
-import {Link, useNavigate} from "react-router-dom";
-const signup_URL = '/auth/signup';
 
-const Signup = () => {
+const SignUp = ({ isAuthenticated, signUpCompleted }) => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [text, setText] = useState("");
+
+    const location = useLocation();
     const navigate = useNavigate();
-    const { setAuth } = useAuth();
-    const userRef = useRef();
-    const errRef = useRef();
-
-    const [user, setUser] = useState('');
-    const [pwd, setPwd] = useState('');
-    const [errMsg, setErrMsg] = useState('');
-    const [success, setSuccess] = useState(false);
-
-    useEffect(() => {
-        userRef.current.focus();
-    }, [])
-
-    useEffect(() => {
-        setErrMsg('');
-    }, [user, pwd])
-
+    const { from } = location.state || { from: { pathname: "/" } };
+    if (isAuthenticated) return navigate(from);
+    console.log(isAuthenticated);
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(signup_URL,
-                JSON.stringify({ email: user, password: pwd }),
-                {
-                    headers: { "Content-Type": "application/json" }
-                }
-            );
-            console.log(response);
-            const accessToken = response?.data?.access_token;
-            setAuth({user, pwd, accessToken});
-            setUser('');
-            setPwd('');
-            setSuccess(true);
-
-            if (response.data.access_token) {
-                localStorage.setItem("access_token", response.data.access_token);
-            }
-            if (response.status === 201) {
+            postSignUp(email, password).then(response => {
                 console.log(response);
-                navigate('/todos');
-            }
+                const accessToken = response?.data?.access_token;
+
+                if (response.data.access_token) {
+                    localStorage.setItem("access_token", response.data.access_token);
+                }
+                if (response.status === 201) {
+                    signUpCompleted(true);
+                    runTasks();
+                    // navigate('/todos');
+                }
+            });
         } catch (err) {
+            alert("Failed to register");
+            setEmail("");
+            setPassword("");
             if (!err?.response) {
-                setErrMsg('No Server Response');
+                alert('No Server Response');
             } else if (err.response?.status === 400) {
                 console.log(err.response);
                 console.log(err.message);
                 console.log(err.request);
-                setErrMsg('있거나 validation에 맞지 않음');
+                alert('있거나 validation에 맞지 않음');
             } else if (err.response?.status === 401) {
-                setErrMsg('Unauthorized');
+                alert('Unauthorized');
             } else {
-                setErrMsg('Login Failed');
+                alert('Login Failed');
             }
-            errRef.current.focus();
+            // errRef.current.focus();
         }
     }
 
-    return (
-        <>
-            {!success && (
-                <section>
-                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-                    <h1>Sign Up</h1>
-                    <form className="commonForm" onSubmit={handleSubmit}>
-                        <label htmlFor="username">Username:</label>
-                        <input
-                            type="text"
-                            id="username"
-                            ref={userRef}
-                            autoComplete="off"
-                            onChange={(e) => setUser(e.target.value)}
-                            value={user}
-                            required
-                        />
+    const runTasks = async () => {
+        try {
+            let result = await loading(0);
+            setText('[1/4]회원가입중.');
+            await loading(result++);
+            setText('[2/4]회원가입중..');
+            await loading(result++);
+            setText('[3/4]회원가입중...');
+            await loading(result++);
+            setText('[4/4]회원가입 완료 !');
+            await loading(result++);
+            // navigate("/todos");
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
-                        <label htmlFor="password">Password:</label>
-                        <input
-                            type="password"
-                            id="password"
-                            onChange={(e) => setPwd(e.target.value)}
-                            value={pwd}
-                            required
-                        />
-                        <button>Sign Up</button>
-                    </form>
-                    <p>
-                        Already a user?<br/>
-                        <Link to="/">Login</Link>
-                    </p>
-                </section>
-            )}
-        </>
+    const loading = (num) => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                const result = num + 1;
+                if(result > 5) {
+                    const error = new Error("over loading");
+                    return reject(error);
+                }
+                resolve(result);
+            }, 500);
+        });
+    }
+
+    return (
+        <form className="commonForm" onSubmit={handleSubmit}>
+            <section>
+                <h1>Register</h1>
+                <label htmlFor="username">Username:</label>
+                <input type="text"
+                       id="username"
+                       autoComplete="off"
+                       value={email}
+                       placeholder="email"
+                       onChange={(e) => setEmail(e.target.value)}
+                       required
+                />
+                <label htmlFor="password">Password:</label>
+                <input type="password"
+                       id="password"
+                       value={password}
+                       placeholder="password"
+                       onChange={(e) => setPassword(e.target.value)}
+                       required
+                />
+                <button type="submit">Sign Up</button>
+                <p>
+                    Already a user?<br/>
+                    <button onClick={() => navigate("/")}>Login</button>
+                </p>
+                <div>{text}</div>
+            </section>
+        </form>
     )
 }
 
-export default Signup;
+export default SignUp;

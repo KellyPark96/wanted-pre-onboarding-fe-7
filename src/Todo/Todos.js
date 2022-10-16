@@ -1,9 +1,13 @@
 import { getTodos, postTodo, updateTodo, deleteTodo } from "../api/TodoApi";
-import React, {useEffect, useRef, useState} from "react";
+import React, { useState,useContext, useEffect, useRef } from "react";
 import TodoList from "../components/TodoList";
+import AuthContext from "../AuthProvider";
 const getTodos_URL = '/auth/todos';
 
 function Todos(){
+    const { auth } = useContext(AuthContext);
+    console.log(auth);
+
     const [value, setValue] = useState([]);
     const [todos, setTodos] = useState([]);
     useEffect(() => {

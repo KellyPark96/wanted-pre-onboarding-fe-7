@@ -1,21 +1,20 @@
-import React, { useState } from "react";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import Login from "../auth/Login";
-import Home from "../Home";
-import Register from "../auth/Register";
+import React, { useContext, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AuthContext from "../AuthProvider";
+import SignUp from "../auth/SignUp";
 import Todos from "../Todo/Todos";
 import LoginForm from "../auth/LoginForm.js";
 import Header from "../Header"
 
 const AppRouter = () => {
-    const [user, setUser] = useState(null);
-
-    const isAuthenticated = (user != null);
-
-    const login = ({ email, password }) => setUser("");
-    const logout = () => setUser(null);
+    const { auth } = useContext(AuthContext);
+    const { setAuth } = useContext(AuthContext);
+    const isAuthenticated = (auth === "");
+    const logout = () => setAuth(!auth.email);
     const [signUp, setSignUp] = useState(null);
     const signUpCompleted = ({ sign }) => setSignUp({ sign });
+    console.log(auth);
+    console.log(isAuthenticated);
 
     return (
         <>
@@ -24,18 +23,17 @@ const AppRouter = () => {
                         signUpCompleted={signUpCompleted}
                         logout={logout}/>
                 <Routes>
-                    <Route path="/" element={<Home/>}></Route>
                     <Route
-                        path="/todos"
-                        element={<Todos />}
-                    ></Route>
-                    <Route
-                        path="/login"
-                        element={<LoginForm isAuthenticated={isAuthenticated} login={login}/>}
+                        path="/"
+                        element={<LoginForm isAuthenticated={isAuthenticated} />}
                     ></Route>
                     <Route
                         path="/sign-up"
-                        element={<Register isAuthenticated={isAuthenticated} signUpCompleted={signUpCompleted}/>}
+                        element={<SignUp isAuthenticated={isAuthenticated} signUpCompleted={signUpCompleted}/>}
+                    ></Route>
+                    <Route
+                        path="/todos"
+                        element={<Todos/>}
                     ></Route>
                 </Routes>
             </BrowserRouter>

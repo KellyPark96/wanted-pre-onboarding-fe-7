@@ -26,7 +26,7 @@ const Header = ({ isAuthenticated, signUpCompleted, logout }) => {
                 {isAuthenticated ? (
                     <LogoutButton logout={logout}/>
                 ) : (<>
-                    <Link to="/login">
+                    <Link to="/">
                         <button>Login</button>
                     </Link>
                     <Link to="/sign-up">

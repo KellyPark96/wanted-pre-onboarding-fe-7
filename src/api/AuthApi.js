@@ -28,7 +28,7 @@ export const postSignIn = async (email, password) => {
             "password": password
         }
     });
-    if (response.status !== 201) {
+    if (response.status !== 200) {
         console.log(`${response.status} 에러가 발생했습니다`);
     }
     return response;

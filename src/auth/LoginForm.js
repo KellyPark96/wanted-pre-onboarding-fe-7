@@ -1,26 +1,41 @@
-import React, { useState } from "react";
+import { postSignIn } from "../api/AuthApi";
+import React, { useState, createContext, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { AuthContext } from "../hooks/useAuth";
 
 const LoginForm = ({ isAuthenticated, login }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const useAuth = useContext(AuthContext);
+    console.log(useAuth);
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { from } = location.state || { from: { pathname: "/" } };
+
+    if (isAuthenticated) return navigate(from);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         try {
-            login({ email, password });
+            postSignIn(email, password).then(response => {
+                login({ email, password });
+                const accessToken = response?.data?.access_token;
+
+                if (response.data.access_token) {
+                    localStorage.setItem("access_token", response.data.access_token);
+                    // setAuth({ email, password, accessToken });
+                }
+                if (response.status === 201) {
+                    console.log(response);
+                }
+            });
         } catch (error) {
             alert("Failed to login");
             setEmail("");
             setPassword("");
         }
     }
-
-    const location = useLocation();
-    const navigate = useNavigate();
-    const { from } = location.state || { from: { pathname: "/" } };
-    if (isAuthenticated) return navigate(from);
 
     return (
         <form className="commonForm" onSubmit={handleSubmit}>
@@ -34,7 +49,7 @@ const LoginForm = ({ isAuthenticated, login }) => {
                        value={email}
                        placeholder="email"
                        onChange={(e) => setEmail(e.target.value)}
-                       // ref={userRef}
+                    // ref={userRef}
                        required
                 />
                 <label htmlFor="password">Password:</label>
@@ -45,8 +60,11 @@ const LoginForm = ({ isAuthenticated, login }) => {
                        onChange={(e) => setPassword(e.target.value)}
                        required
                 />
-                <button type="submit">Sign In</button>
-                <p>Need an Account?<br/><button onClick={()=> navigate("/sign-up")}>SignUp</button></p>
+                <button type="submit">Login</button>
+                <p>
+                    Need an Account?<br/>
+                    <button onClick={() => navigate("/sign-up")}>SignUp</button>
+                </p>
             </section>
         </form>
     )

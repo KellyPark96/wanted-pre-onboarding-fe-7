@@ -6,14 +6,13 @@ import Register from "../auth/Register";
 import Todos from "../Todo/Todos";
 import LoginForm from "../auth/LoginForm.js";
 import Header from "../Header"
-import { SignIn } from "../auth/Auth";
 
 const AppRouter = () => {
     const [user, setUser] = useState(null);
 
     const isAuthenticated = (user != null);
 
-    const login = ({ email, password }) => setUser(SignIn({ email, password }));
+    const login = ({ email, password }) => setUser("");
     const logout = () => setUser(null);
     const [signUp, setSignUp] = useState(null);
     const signUpCompleted = ({ sign }) => setSignUp({ sign });

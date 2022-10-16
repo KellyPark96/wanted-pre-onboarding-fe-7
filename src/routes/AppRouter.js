@@ -1,37 +1,32 @@
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import React, { useContext, useState } from "react";
-import AuthContext from "../AuthProvider";
+import TodoRouter from "../routes/TodoRouter";
+import Header from "../Header"
+import Login from "../auth/Login.js";
 import SignUp from "../auth/SignUp";
 import Todos from "../Todo/Todos";
-import LoginForm from "../auth/LoginForm.js";
-import Header from "../Header"
+
 
 const AppRouter = () => {
-    const { auth } = useContext(AuthContext);
-    const { setAuth } = useContext(AuthContext);
-    const isAuthenticated = (auth === "");
-    const logout = () => setAuth(!auth.email);
-    const [signUp, setSignUp] = useState(null);
-    const signUpCompleted = ({ sign }) => setSignUp({ sign });
-
     return (
         <Router>
-                <Header isAuthenticated={isAuthenticated}
-                        signUpCompleted={signUpCompleted}
-                        logout={logout}/>
+                <Header />
                 <Routes>
                     <Route
                         path="/"
-                        element={<LoginForm isAuthenticated={isAuthenticated} />}
+                        element={<Login />}
                     ></Route>
                     <Route
                         path="/sign-up"
-                        element={<SignUp isAuthenticated={isAuthenticated} signUpCompleted={signUpCompleted}/>}
+                        element={<SignUp />}
                     ></Route>
                     <Route
                         path="/todo"
-                        element={<Todos/>}
-                    ></Route>
+                        element={
+                        <TodoRouter>
+                            <Todos />
+                        </TodoRouter>
+                    }></Route>
                 </Routes>
         </Router>
     )

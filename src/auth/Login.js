@@ -1,20 +1,19 @@
 import { postSignIn } from "../api/AuthApi";
-import React, { useState, useContext, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import AuthContext from "../AuthProvider";
-import { getTodos } from "../api/TodoApi";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { validLogin } from "./ValidationCheck";
 
-const LoginForm = ({ isAuthenticated }) => {
-    const { setAuth } = useContext(AuthContext);
-    const { auth } = useContext(AuthContext);
-    console.log(auth);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+const Login = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-    const location = useLocation();
     const navigate = useNavigate();
-    const { from } = location.state || { from: { pathname: "/" } };
-    if (isAuthenticated) return navigate(from);
+
+    useEffect(() => {
+        if (localStorage.getItem('access_token')) navigate('/todo');
+    }, [navigate]);
+
+    const handleDisabledLoginButton = () => validLogin(email, password);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -22,17 +21,8 @@ const LoginForm = ({ isAuthenticated }) => {
             postSignIn(email, password).then(response => {
                 console.log(response);
                 const accessToken = response?.data?.access_token;
-
-                if (response.data.access_token) {
-                    localStorage.setItem("access_token", response.data.access_token);
-                    setAuth({email, accessToken});
-                    isAuthenticated = true;
-                    console.log(isAuthenticated);
-                    navigate("/");
-                }
-                if (response.status === 200) {
-                    console.log(response);
-                }
+                localStorage.setItem("access_token", accessToken);
+                navigate("/todo");
             });
         } catch (error) {
             alert("Failed to login");
@@ -40,7 +30,6 @@ const LoginForm = ({ isAuthenticated }) => {
             setPassword("");
         }
     }
-    console.log(isAuthenticated);
 
     return (
         <form className="commonForm" onSubmit={handleSubmit}>
@@ -53,7 +42,6 @@ const LoginForm = ({ isAuthenticated }) => {
                        value={email}
                        placeholder="email"
                        onChange={(e) => setEmail(e.target.value)}
-                    // ref={userRef}
                        required
                 />
                 <input type="password"
@@ -63,7 +51,11 @@ const LoginForm = ({ isAuthenticated }) => {
                        onChange={(e) => setPassword(e.target.value)}
                        required
                 />
-                <button type="submit" className="submitButton">Login</button>
+                <button type="submit"
+                        className="submitButton"
+                        disabled={handleDisabledLoginButton()}
+                >Login
+                </button>
                 <p className="changeMessage">
                     Need an Account?<br/>
                     <button className="changeButton" onClick={() => navigate("/sign-up")}>SignUp</button>
@@ -73,4 +65,4 @@ const LoginForm = ({ isAuthenticated }) => {
     )
 }
 
-export default LoginForm;
+export default Login;

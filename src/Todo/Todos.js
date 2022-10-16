@@ -3,18 +3,13 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import TodoList from "../components/TodoList";
 import AuthContext from "../AuthProvider";
 
-const getTodos_URL = '/auth/todos';
-
 function Todos() {
-    const { auth } = useContext(AuthContext);
-    console.log(auth);
-
-    const [value, setValue] = useState([]);
-    const [todos, setTodos] = useState([]);
     useEffect(() => {
         getTodos().then(todos => setTodos(todos.data))
     }, []);
 
+    const [value, setValue] = useState([]);
+    const [todos, setTodos] = useState([]);
     console.log(todos);
 
     const handleRegisterTodo = (e) => {

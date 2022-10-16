@@ -1,18 +1,18 @@
 import { postSignUp } from "../api/AuthApi";
-import React, { useRef, useState, useEffect } from 'react';
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
+import { validSignUp } from "./ValidationCheck";
 
 
-const SignUp = ({ isAuthenticated, signUpCompleted }) => {
+const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [text, setText] = useState("");
 
-    const location = useLocation();
+    const handleDisabledSignUpButton = () => validSignUp(email, password);
+
+    const [text, setText] = useState("");
     const navigate = useNavigate();
-    const { from } = location.state || { from: { pathname: "/" } };
-    if (isAuthenticated) return navigate(from);
-    console.log(isAuthenticated);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -24,9 +24,8 @@ const SignUp = ({ isAuthenticated, signUpCompleted }) => {
                     localStorage.setItem("access_token", response.data.access_token);
                 }
                 if (response.status === 201) {
-                    signUpCompleted(true);
                     runTasks();
-                    // navigate('/todos');
+                    navigate('/todo', { paramName: 'value' });
                 }
             });
         } catch (err) {
@@ -70,7 +69,7 @@ const SignUp = ({ isAuthenticated, signUpCompleted }) => {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 const result = num + 1;
-                if(result > 5) {
+                if (result > 5) {
                     const error = new Error("over loading");
                     return reject(error);
                 }
@@ -98,7 +97,10 @@ const SignUp = ({ isAuthenticated, signUpCompleted }) => {
                        onChange={(e) => setPassword(e.target.value)}
                        required
                 />
-                <button type="submit" className="submitButton">Sign Up</button>
+                <button type="submit"
+                        className="submitButton"
+                        disabled={handleDisabledSignUpButton()}>Sign Up
+                </button>
                 <p className="changeMessage">
                     Already a user?<br/>
                     <button className="changeButton" onClick={() => navigate("/")}>Login</button>

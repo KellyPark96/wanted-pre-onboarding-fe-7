@@ -8,7 +8,6 @@ const LoginForm = ({ isAuthenticated }) => {
     const { setAuth } = useContext(AuthContext);
     const { auth } = useContext(AuthContext);
     console.log(auth);
-    console.log(setAuth);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -46,8 +45,8 @@ const LoginForm = ({ isAuthenticated }) => {
     return (
         <form className="commonForm" onSubmit={handleSubmit}>
             <section>
-                <h1>Login</h1>
-                <label htmlFor="username">Username:</label>
+                <p></p>
+                <h1 className="title">Login</h1>
                 <input type="text"
                        id="username"
                        autoComplete="off"
@@ -57,7 +56,6 @@ const LoginForm = ({ isAuthenticated }) => {
                     // ref={userRef}
                        required
                 />
-                <label htmlFor="password">Password:</label>
                 <input type="password"
                        id="password"
                        value={password}
@@ -65,10 +63,10 @@ const LoginForm = ({ isAuthenticated }) => {
                        onChange={(e) => setPassword(e.target.value)}
                        required
                 />
-                <button type="submit">Login</button>
-                <p>
+                <button type="submit" className="submitButton">Login</button>
+                <p className="changeMessage">
                     Need an Account?<br/>
-                    <button onClick={() => navigate("/sign-up")}>SignUp</button>
+                    <button className="changeButton" onClick={() => navigate("/sign-up")}>SignUp</button>
                 </p>
             </section>
         </form>

@@ -3,19 +3,19 @@ import React from "react";
 import LogoutButton from "./auth/LogoutButton"
 
 const Header = ({ isAuthenticated, signUpCompleted, logout }) => {
-
+    console.log(isAuthenticated)
     return (
         <header className="header">
             <div className="header__left">
                 {isAuthenticated ? (
-                        <Link to="/todos">
+                        <Link to="/todo">
                             <button>TodoList</button>
                         </Link>
                     ) :
                     (signUpCompleted ? (
                             <></>
                         ) : (
-                            <Link to="/todos">
+                            <Link to="/todo">
                                 <button>TodoList</button>
                             </Link>
                         )
@@ -25,14 +25,9 @@ const Header = ({ isAuthenticated, signUpCompleted, logout }) => {
             <ul className="header__right">
                 {isAuthenticated ? (
                     <LogoutButton logout={logout}/>
-                ) : (<>
-                    <Link to="/">
-                        <button>Login</button>
-                    </Link>
-                    <Link to="/sign-up">
-                        <button>SignUp</button>
-                    </Link>
-                </>)}
+                ) : (
+                    <LogoutButton logout={logout}/>
+                )}
             </ul>
         </header>
     )

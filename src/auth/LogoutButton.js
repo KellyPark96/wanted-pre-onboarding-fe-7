@@ -12,7 +12,7 @@ const LogoutButton = ({ logout }) => {
         navigate("/");
     }
     return (
-        <button onClick={handleClick}>Logout</button>
+        <button className="logoutButton" onClick={handleClick}>Logout</button>
     )
 }
 

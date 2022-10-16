@@ -1,5 +1,5 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import React, { useContext, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AuthContext from "../AuthProvider";
 import SignUp from "../auth/SignUp";
 import Todos from "../Todo/Todos";
@@ -13,12 +13,9 @@ const AppRouter = () => {
     const logout = () => setAuth(!auth.email);
     const [signUp, setSignUp] = useState(null);
     const signUpCompleted = ({ sign }) => setSignUp({ sign });
-    console.log(auth);
-    console.log(isAuthenticated);
 
     return (
-        <>
-            <BrowserRouter>
+        <Router>
                 <Header isAuthenticated={isAuthenticated}
                         signUpCompleted={signUpCompleted}
                         logout={logout}/>
@@ -32,12 +29,11 @@ const AppRouter = () => {
                         element={<SignUp isAuthenticated={isAuthenticated} signUpCompleted={signUpCompleted}/>}
                     ></Route>
                     <Route
-                        path="/todos"
+                        path="/todo"
                         element={<Todos/>}
                     ></Route>
                 </Routes>
-            </BrowserRouter>
-        </>
+        </Router>
     )
 }
 

@@ -82,8 +82,7 @@ const SignUp = ({ isAuthenticated, signUpCompleted }) => {
     return (
         <form className="commonForm" onSubmit={handleSubmit}>
             <section>
-                <h1>Register</h1>
-                <label htmlFor="username">Username:</label>
+                <h1 className="title">Register</h1>
                 <input type="text"
                        id="username"
                        autoComplete="off"
@@ -92,7 +91,6 @@ const SignUp = ({ isAuthenticated, signUpCompleted }) => {
                        onChange={(e) => setEmail(e.target.value)}
                        required
                 />
-                <label htmlFor="password">Password:</label>
                 <input type="password"
                        id="password"
                        value={password}
@@ -100,10 +98,10 @@ const SignUp = ({ isAuthenticated, signUpCompleted }) => {
                        onChange={(e) => setPassword(e.target.value)}
                        required
                 />
-                <button type="submit">Sign Up</button>
-                <p>
+                <button type="submit" className="submitButton">Sign Up</button>
+                <p className="changeMessage">
                     Already a user?<br/>
-                    <button onClick={() => navigate("/")}>Login</button>
+                    <button className="changeButton" onClick={() => navigate("/")}>Login</button>
                 </p>
                 <div>{text}</div>
             </section>

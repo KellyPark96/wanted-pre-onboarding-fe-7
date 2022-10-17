@@ -6,7 +6,6 @@ const TodoRouter = ({ children }) => {
     if (accessToken === null) {
         return <Navigate to="/"/>
     }
-
     return <>{children}</>;
 };
 

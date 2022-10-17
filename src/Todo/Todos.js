@@ -1,39 +1,76 @@
 import { getTodos, postTodo, updateTodo, deleteTodo } from "../api/TodoApi";
-import React, { useState, useContext, useEffect, useRef } from "react";
-import TodoList from "../components/TodoList";
-import AuthContext from "../AuthProvider";
+import React, { useState, useEffect, useRef } from "react";
+import TodoList from "./TodoList";
+import Header from "../Header";
 
 function Todos() {
-    useEffect(() => {
-        getTodos().then(todos => setTodos(todos.data))
-    }, []);
-
     const [value, setValue] = useState([]);
     const [todos, setTodos] = useState([]);
-    console.log(todos);
+    const registerInput = useRef(null);
+
+    const access_token = localStorage.getItem('access_token');
+
+    useEffect(() => {
+        getTodos(access_token).then((response)=> {
+            console.log(response.data);
+            setTodos(response.data);
+        })
+    }, [access_token]);
 
     const handleRegisterTodo = (e) => {
         e.preventDefault();
         console.log(value);
-        postTodo(value).then(response => console.log(response.data));
+        postTodo(access_token, value).then(response => {
+            setTodos(prev => ([...prev, response.data]));
+        }).then(()=> {
+            registerInput.current.value = "";
+            listBodyScroll();
+        });
+    }
+
+    const listBodyScroll = () => {
+        const listBody = document.querySelector('.todoFormWrap ul');
+        listBody.scrollTop = listBody.scrollHeight;
     }
 
     const changeCreteValue = (e) => {
         setValue(e.target.value);
     }
 
+    const handleUpdateTodo = (todoId, value, isCompleted) => {
+        updateTodo(access_token, todoId, value, isCompleted).then(response => {
+            setTodos((prev) => {
+                const updatedTodos = [...prev];
+                const listIndex = updatedTodos.findIndex(todo => todoId === todo.id);
+                updatedTodos[listIndex] = response.data;
+                console.log(updatedTodos);
+                return updatedTodos;
+            })
+        })
+    }
+
+    const handleDeleteTodo = (todoId) => {
+        deleteTodo(access_token, todoId).then(response => {
+            console.log(response);
+            setTodos((prev) => (prev.filter(({id})=> id !== todoId)));
+        });
+    }
+
     return (
+        <>
+        <Header />
         <div className="todoFormWrap">
             <section>
                 <form className="todoForm" onSubmit={handleRegisterTodo}>
-                    <input onChange={changeCreteValue} type="text" placeholder="Write Your Todo List."/>
+                    <input onChange={changeCreteValue} ref={registerInput} type="text" placeholder="Write Your Todo List."/>
                     <button className="registerButton">Register</button>
                 </form>
                 <ul>
-                    {todos.map(todo => <TodoList key={todo.id} todoList={todo}/>)}
+                    <TodoList todos={todos} handleUpdateTodo={handleUpdateTodo} handleDeleteTodo={handleDeleteTodo}/>
                 </ul>
             </section>
         </div>
+        </>
     )
 }
 

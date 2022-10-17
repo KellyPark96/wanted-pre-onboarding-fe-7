@@ -1,6 +1,6 @@
 import { postSignUp } from "../api/AuthApi";
 import React, { useState } from 'react';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { validSignUp } from "./ValidationCheck";
 
 
@@ -18,14 +18,12 @@ const SignUp = () => {
         try {
             postSignUp(email, password).then(response => {
                 console.log(response);
-                const accessToken = response?.data?.access_token;
-
                 if (response.data.access_token) {
                     localStorage.setItem("access_token", response.data.access_token);
                 }
                 if (response.status === 201) {
                     runTasks();
-                    navigate('/todo', { paramName: 'value' });
+                    navigate('/todo');
                 }
             });
         } catch (err) {
@@ -44,7 +42,6 @@ const SignUp = () => {
             } else {
                 alert('Login Failed');
             }
-            // errRef.current.focus();
         }
     }
 
@@ -59,7 +56,6 @@ const SignUp = () => {
             await loading(result++);
             setText('[4/4]회원가입 완료 !');
             await loading(result++);
-            // navigate("/todos");
         } catch (err) {
             console.log(err);
         }

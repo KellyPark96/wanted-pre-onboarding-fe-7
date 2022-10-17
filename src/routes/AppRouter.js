@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import TodoRouter from "../routes/TodoRouter";
-import Header from "../Header"
 import Login from "../auth/Login.js";
 import SignUp from "../auth/SignUp";
 import Todos from "../Todo/Todos";
@@ -10,7 +9,6 @@ import Todos from "../Todo/Todos";
 const AppRouter = () => {
     return (
         <Router>
-                <Header />
                 <Routes>
                     <Route
                         path="/"

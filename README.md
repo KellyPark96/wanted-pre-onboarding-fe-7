@@ -13,5 +13,6 @@ $ npm start
 ## 2. 데모 영상
 <img width="80%" src="https://user-images.githubusercontent.com/96809147/196191936-09a7f633-9e81-4ae0-99c9-684ff765983b.mov" alt="demoVideo"/>
 
-## 2. 배포
+
+## 3. 배포
 https://kellypark96.github.io/wanted-pre-onboarding-fe-7/todo

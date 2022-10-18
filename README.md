@@ -15,5 +15,5 @@ $ npm start
 
 ## 3. 배포  
 
-https://kellypark96.github.io/wanted-pre-onboarding-fe-7/
+https://kellypark96.github.io/wanted-pre-onboarding-fe-7
 

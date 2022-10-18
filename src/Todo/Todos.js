@@ -1,7 +1,9 @@
 import { getTodos, postTodo, updateTodo, deleteTodo } from "../api/TodoApi";
 import React, { useState, useEffect, useRef } from "react";
 import TodoList from "./TodoList";
-import Header from "../Header";
+import Header from "./Header";
+import { CreateInput, ScrollArea, TodoForm, TodoSection } from "./TodoStyle";
+import RegisterButton from "../components/todo/RegisterButton";
 
 function Todos() {
     const [value, setValue] = useState([]);
@@ -60,15 +62,15 @@ function Todos() {
         <>
         <Header />
         <div className="todoFormWrap">
-            <section>
-                <form className="todoForm" onSubmit={handleRegisterTodo}>
-                    <input onChange={changeCreteValue} ref={registerInput} type="text" placeholder="Write Your Todo List."/>
-                    <button className="registerButton">Register</button>
-                </form>
-                <ul>
+            <TodoSection>
+                <TodoForm onSubmit={handleRegisterTodo}>
+                    <CreateInput onChange={changeCreteValue} ref={registerInput} type="text" placeholder="Write Your Todo List."/>
+                    <RegisterButton/>
+                </TodoForm>
+                <ScrollArea>
                     <TodoList todos={todos} handleUpdateTodo={handleUpdateTodo} handleDeleteTodo={handleDeleteTodo}/>
-                </ul>
-            </section>
+                </ScrollArea>
+            </TodoSection>
         </div>
         </>
     )

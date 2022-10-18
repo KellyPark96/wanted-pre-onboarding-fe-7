@@ -7,10 +7,6 @@ export const validPassword = (password) => {
     return password.length >= 8;
 };
 
-export const validLogin = (email, password) => {
-    return !(validEmail(email) && validPassword(password));
-};
-
-export const validSignUp = (email, password) => {
+export const validAuth = (email, password) => {
     return !(validEmail(email) && validPassword(password));
 };

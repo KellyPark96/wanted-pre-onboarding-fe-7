@@ -1,4 +1,3 @@
-Assignment specific
 ( ) 배포 사이트
 ( ) README 정리
 ( ) 숏에세이 작성

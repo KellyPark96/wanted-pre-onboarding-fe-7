@@ -1,7 +1,12 @@
 import { postSignIn } from "../api/AuthApi";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { validLogin } from "./ValidationCheck";
+
+import { validAuth } from "./ValidationCheck";
+import { AuthForm, AuthSection } from "./AuthStyle";
+import { AuthInput, AuthTitle, AuthTypeChangeMessage } from "../components/auth/AuthContentsStyle";
+import SubmitButton from "../components/auth/SubmitButton";
+import ChangeButton from "../components/auth/ChangeButton";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -13,7 +18,7 @@ const Login = () => {
         if (localStorage.getItem('access_token')) navigate('/todo');
     }, [navigate]);
 
-    const handleDisabledLoginButton = () => validLogin(email, password);
+    const handleDisabledButton = () => validAuth(email, password);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -32,36 +37,29 @@ const Login = () => {
     }
 
     return (
-        <form className="commonForm" onSubmit={handleSubmit}>
-            <section>
-                <p></p>
-                <h1 className="title">Login</h1>
-                <input type="text"
-                       id="username"
-                       autoComplete="off"
-                       value={email}
-                       placeholder="email"
-                       onChange={(e) => setEmail(e.target.value)}
-                       required
-                />
-                <input type="password"
-                       id="password"
-                       value={password}
-                       placeholder="password"
-                       onChange={(e) => setPassword(e.target.value)}
-                       required
-                />
-                <button type="submit"
-                        className="submitButton"
-                        disabled={handleDisabledLoginButton()}
-                >Login
-                </button>
-                <p className="changeMessage">
+        <AuthForm onSubmit={ handleSubmit }>
+            <AuthSection>
+                <AuthTitle>Login</AuthTitle>
+                <AuthInput type="text"
+                           id="username"
+                           autoComplete="off"
+                           value={ email }
+                           placeholder="email"
+                           onChange={ (e) => setEmail(e.target.value) }
+                           required />
+                <AuthInput type="password"
+                           id="password"
+                           value={ password }
+                           placeholder="password"
+                           onChange={ (e) => setPassword(e.target.value) }
+                           required />
+                <SubmitButton authType={"Login"} handleDisabledButton={handleDisabledButton} />
+                <AuthTypeChangeMessage>
                     Need an Account?<br/>
-                    <button className="changeButton" onClick={() => navigate("/sign-up")}>SignUp</button>
-                </p>
-            </section>
-        </form>
+                    <ChangeButton changeType={"SignUp"} onClick={() => navigate("/sign-up")} />
+                </AuthTypeChangeMessage>
+            </AuthSection>
+        </AuthForm>
     )
 }
 

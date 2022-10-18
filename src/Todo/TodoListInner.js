@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { EditInput, TodoButtons, TodoItems } from "./TodoStyle"
+import TodoListButton from "../components/todo/TodoListButton";
+import IsCompleteButton from "../components/todo/IsCompleteButton";
 
 const TodoListInner = ({ todo, handleUpdateTodo, handleDeleteTodo }) => {
     const [toggleButton, setToggleButton] = useState(false);
@@ -24,35 +27,35 @@ const TodoListInner = ({ todo, handleUpdateTodo, handleDeleteTodo }) => {
     }
 
     return (
-        <li key={todo.id}>
+        <TodoItems key={todo.id}>
             { !toggleButton ? (
                 <>
                     {todo.todo}
                 </>
             ) : (
                 <>
-                    <input className="editInput"
-                           type="text"
-                           onChange={(e)=> setUpdateValue(e.target.value)}
-                           value={updateValue} />
+                    <EditInput type="text"
+                               onChange={(e)=> setUpdateValue(e.target.value)}
+                               value={updateValue} />
                 </>
             )}
 
-            <div className="todoListButtonWrap">
+            <TodoButtons>
                 { !toggleButton ? (
                     <>
-                        <button onClick={handleEditButton}>Edit</button>
+                        <TodoListButton buttonType={"Edit"} onClick={handleEditButton} />
                     </>
                 ) : (
                     <>
-                        <button onClick={submitUpdateTodo}>Submit</button>
-                        <button onClick={handleEditButton}>Cancel</button>
-                        <button onClick={handleIsCompleted}>{!isCompleted ? 'Uncompleted' : 'Completed'}</button>
+                        <TodoListButton buttonType={"Submit"} onClick={submitUpdateTodo} />
+                        <TodoListButton buttonType={"Cancel"} onClick={handleEditButton} />
+                        <IsCompleteButton isCompleted={isCompleted} onClick={handleIsCompleted} />
                     </>
                 )}
-                <button className="delete" onClick={() => handleDeleteTodo(todo.id)}>X</button>
-            </div>
-        </li>
+                <TodoListButton buttonType={"X"} onClick={() => handleDeleteTodo(todo.id)} $delete />
+
+            </TodoButtons>
+        </TodoItems>
     )
 }
 

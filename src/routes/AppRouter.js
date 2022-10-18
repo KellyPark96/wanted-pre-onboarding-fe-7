@@ -8,7 +8,7 @@ import Todos from "../Todo/Todos";
 
 const AppRouter = () => {
     return (
-        <Router>
+        <Router basename={process.env.PUBLIC_URL}>
                 <Routes>
                     <Route
                         path="/"

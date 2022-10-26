@@ -13,3 +13,31 @@ $ npm start
 
 https://kellypark96.github.io/wanted-pre-onboarding-fe-7
 
+## 4. Structure
+└── src
+├── api
+│   ├── AuthApi.js
+│   └── axios.js
+│   └── TodoApi.js
+├── auth
+│   └── AuthStyle.js
+│   └── Login.js
+│   └── SignUp.js
+│   └── ValidationCheck.js
+├── components
+│   └── auth
+│       └── AuthContentsStyle.js
+│       └── ChangeButton.js
+│       └── LogoutButton.js
+│       └── SubmitButton.js
+│   └── todo
+│       └── isCompleteButton.js
+│       └── RegisterButton.js
+│       └── TodoContentsStyle.js
+│       └── TodoListButton.js
+├── routes
+│   └── AppRouter.js
+│   └── TodoRouter.js
+├── style
+│   ├── GlobalStyle.js
+├── App.js

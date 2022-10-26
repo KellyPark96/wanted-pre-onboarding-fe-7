@@ -14,6 +14,7 @@ $ npm start
 https://kellypark96.github.io/wanted-pre-onboarding-fe-7
 
 ## 4. Structure
+```
 └── src
 ├── api
 │   ├── AuthApi.js
@@ -41,3 +42,4 @@ https://kellypark96.github.io/wanted-pre-onboarding-fe-7
 ├── style
 │   ├── GlobalStyle.js
 ├── App.js
+```
